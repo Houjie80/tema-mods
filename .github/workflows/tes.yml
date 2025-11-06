@@ -39,39 +39,28 @@ jobs:
         run: |
           cd SNAPSDK
           make defconfig
-          make package/${{ inputs.nama }}/compile V=s
+          make package/custom/${{ inputs.nama }}/compile V=s
 
       - name: Collect artifacts
         run: |
           mkdir -p release-artifacts
           cp -vf SNAPSDK/bin/packages/*/*/${{ inputs.nama }}*.ipk release-artifacts/ 2>/dev/null || true
           cp -vf SNAPSDK/bin/targets/*/*/packages/${{ inputs.nama }}*.ipk release-artifacts/ 2>/dev/null || true
-          echo "===> Daftar file IPK:"
-          ls -la release-artifacts/ || true
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: houjie-ipk
-          path: release-artifacts/*.ipk
 
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: build-${{ github.run_number }}
-          release_name: "Build ${{ inputs.nama }} #${{ github.run_number }}"
-          draft: false
-          prerelease: false
-
-      - name: Upload Release Assets
-        uses: actions/upload-release-asset@v1
+          name: "Build ${{ inputs.nama }} #${{ github.run_number }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: release-artifacts/*.ipk
-          asset_name: ${{ inputs.nama }}.ipk
-          asset_content_type: application/octet-stream
+
+      - name: Upload IPK to Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for f in release-artifacts/*.ipk; do
+            [ -e "$f" ] || continue
+            echo "→ Upload: $f"
+            gh release upload "build-${{ github.run_number }}" "$f" --clobber
+          done

@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 THEME_NAME:=hj
 PKG_NAME:=luci-theme-hj
-PKG_VERSION:=3.0.1
+PKG_VERSION:=3.0.3
 PKG_RELEASE:=1
 
 LUCI_TITLE:=hj Theme by houjie

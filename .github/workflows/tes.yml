@@ -51,7 +51,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: build-${{ github.run_number }}
-          name: "Build ${{ inputs.nama }} #${{ github.run_number }}"
+          name: "${{ inputs.nama }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

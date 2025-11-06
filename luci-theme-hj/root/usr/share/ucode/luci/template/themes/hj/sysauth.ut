@@ -197,7 +197,7 @@ body {
   height: 120px;
   border-radius: 50%;
   margin: 0 auto 15px auto;
-  background-image: url('/luci-static/hj/logo.png');
+  background-image: url('/luci-static/hj/hj4.png');
   background-size: cover;
   background-position: center;
   box-shadow: 0 0 30px #00ffff, 0 0 70px #00ffaa;
